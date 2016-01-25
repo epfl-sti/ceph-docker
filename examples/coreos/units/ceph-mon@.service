@@ -10,9 +10,10 @@ ExecStartPre=/usr/bin/mkdir -p /etc/ceph /var/lib/ceph/mon
 ExecStart=/usr/bin/docker run --rm --name %p --net=host \
    -v /var/lib/ceph:/var/lib/ceph \
    -v /etc/ceph:/etc/ceph \
-   -e MON_IP=${COREOS_PUBLIC_IPV4} \
-   -e CEPH_PUBLIC_NETWORK=10.21.147.32/27 \
-   -e CEPH_PRIVATE_NETWORK=172.16.42.0/24 \
+   -e MON_IP=${COREOS_PRIVATE_IPV4} \
+   -e CEPH_PUBLIC_NETWORK=${COREOS_PRIVATE_NETWORK} \
+   -e KV_TYPE=etcd \
+   -e KV_IP=${COREOS_PRIVATE_IPV4} \
    -e MON_NAME=%H \
    ceph/daemon mon
 ExecStopPost=-/usr/bin/docker stop %p
@@ -23,7 +24,8 @@ TimeoutStartSec=120
 TimeoutStopSec=15
 
 [X-Fleet]
-Conflicts=ceph-mon@*.service
+Conflicts=ceph-mon@*.s  ervice
+MachineMetadata=has_ups=true
 
 ;; Start on all machines with the mon=true metadata
 ;MachineMetadata=mon=true
