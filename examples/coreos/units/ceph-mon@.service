@@ -24,7 +24,7 @@ TimeoutStartSec=120
 TimeoutStopSec=15
 
 [X-Fleet]
-Conflicts=ceph-mon@*.s  ervice
+Conflicts=ceph-mon@*.service
 MachineMetadata=has_ups=true
 
 ;; Start on all machines with the mon=true metadata
